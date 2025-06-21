@@ -19,6 +19,7 @@ const user_1 = require("./routes/user");
 const description_1 = require("./routes/description");
 const jobTitle_1 = require("./routes/jobTitle");
 const request_1 = require("./routes/request");
+const department_1 = require("./routes/department");
 const port = 8000;
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -26,7 +27,7 @@ app.use("/hobby", hobby_1.hobbyRouter);
 app.use("/user", user_1.userRouter);
 app.use("/description", description_1.descriptionRouter);
 app.use("/jobTitle", jobTitle_1.jobTitleRouter);
-app.use("/department", description_1.descriptionRouter);
+app.use("/department", department_1.departmentRouter);
 app.use("/request", request_1.requestsRouter);
 app.get("/", (_req, res) => {
     res.send("Hello World");
