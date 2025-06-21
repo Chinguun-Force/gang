@@ -6,9 +6,11 @@ import { userRouter } from "./routes/user";
 import { descriptionRouter } from "./routes/description";
 import { jobTitleRouter } from "./routes/jobTitle";
 import { requestsRouter } from "./routes/request";
+import cors from "cors";
 const port = 8000;
-const app = express();
 
+const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use("/hobby", hobbyRouter);
