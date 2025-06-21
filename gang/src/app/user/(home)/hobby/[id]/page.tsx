@@ -27,19 +27,42 @@ import { useEffect, useState } from "react";
 import { BASE_URl } from "@/app/contants";
 import axios from "axios";
 
+type Department = {
+jobTitle: string,
+title: string,
+_id: string
+} []
+
+type Hobby = {
+title: string,
+_id: string
+}[]
+
+type User = {
+  department: string,
+  departmentInfo: Department,
+  hobby: string,
+  hobbyInfo: Hobby,
+  lastName: string,
+  name: string,
+  role: "new",
+  _id: string
+}
+
 export default function HobbyInsertPage() {
   const id = useParams();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   const getUserByHobby = async () => {
-    const response = await axios.get(`${BASE_URl}/user/by-hobby`);
-    const user = response.data;
-    console.log(user)
+    const response = await axios.get(`${BASE_URl}/user/by-hobby?id=${id.id}`);
+    const user = response.data.users;
+    console.log(user, "users")
+    setUsers(user)
   }
 
   useEffect(() => {
     getUserByHobby()
-  }, [])
+  }, [id])
   return (
     <div className="h-screen w-full">
       <h1 className="text-stone-700 text-3xl font-semibold py-30 text-center">
@@ -63,7 +86,7 @@ export default function HobbyInsertPage() {
           {
             users.map((user) => {
               return (
-                <Card className="p-3">
+                <Card className="p-3" key={user._id}>
                   <div className="grid grid-cols-2">
                     <div className="flex flex-col items-center gap-4">
                       <Avatar className="w-16 h-16">
@@ -81,7 +104,7 @@ export default function HobbyInsertPage() {
                     <div className="flex flex-col gap-3">
                       <div className="flex justify-between w-full items-center">
                         <h2 className="text-lg font-semibold text-stone-700">
-                          Hulan Jargal
+                          {user.name}
                         </h2>
 
                         <Heart />
@@ -91,7 +114,7 @@ export default function HobbyInsertPage() {
                       </div>
                       <div className="flex items-center gap-3">
                         <MapPin />{" "}
-                        <p className="text-sm text-stone-500">Хөгжүүлэлтийн хэлтэс</p>
+                        <p className="text-sm text-stone-500">{user.departmentInfo[0].title}</p>
                       </div>
                     </div>
                   </div>
@@ -106,103 +129,6 @@ export default function HobbyInsertPage() {
               )
             })
           }
-          <Card className="p-3">
-            <div className="grid grid-cols-2">
-              <div className="flex flex-col items-center gap-4">
-                <div className="flex ">
-                  <Avatar className="w-16 h-16">
-                    <AvatarImage src={"AG"} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>{" "}
-                  <div>
-                    <Badge className="text-xs font-medium bg-[#FFF8E8] py-1 text-gray-900">
-                      Ботго
-                    </Badge>
-                  </div>
-                </div>
-                <Badge
-                  variant={"outline"}
-                  className="bg-indigo-50 text-blue-900 text-xs font-medium px-6 py-1
-                "
-                >
-                  Уулзъя л даа
-                </Badge>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div className="flex justify-between w-full items-center">
-                  <h2 className="text-lg font-semibold text-stone-700">
-                    Hulan Jargal
-                  </h2>
-
-                  <Heart />
-                </div>
-                <div className="flex items-center gap-3">
-                  <User /> <p className="text-sm text-stone-500">Дизайнер</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <MapPin />{" "}
-                  <p className="text-sm text-stone-500">Хөгжүүлэлтийн хэлтэс</p>
-                </div>
-              </div>
-            </div>
-
-            <Button
-              variant={"outline"}
-              className="bg-blue-400 text-white text-sm font-medium p"
-            >
-              Уулзах уу{" "}
-            </Button>
-          </Card>
-          <Card className="p-3">
-            <div className="grid grid-cols-2">
-              <div className="flex flex-col items-center gap-4">
-                <div className="flex ">
-                  <Avatar className="w-16 h-16">
-                    <AvatarImage src={"AG"} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>{" "}
-                  <div>
-                    <Badge className="text-xs font-medium bg-[#FFF8E8] py-1 text-gray-900">
-                      Ботго
-                    </Badge>
-                  </div>
-                </div>
-                <Badge
-                  variant={"outline"}
-                  className="bg-indigo-50 text-blue-900 text-xs font-medium px-6 py-1
-                "
-                >
-                  Уулзъя л даа
-                </Badge>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div className="flex justify-between w-full items-center">
-                  <h2 className="text-lg font-semibold text-stone-700">
-                    Hulan Jargal
-                  </h2>
-
-                  <Heart />
-                </div>
-                <div className="flex items-center gap-3">
-                  <User /> <p className="text-sm text-stone-500">Дизайнер</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <MapPin />{" "}
-                  <p className="text-sm text-stone-500">Хөгжүүлэлтийн хэлтэс</p>
-                </div>
-              </div>
-            </div>
-
-            <Button
-              variant={"outline"}
-              className="bg-blue-400 text-white text-sm font-medium p"
-            >
-              Уулзах уу{" "}
-            </Button>
-            {/* <Dialog>
-              <DialogTrigger>Open</DialogTrigger>
-            </Dialog> */}
-          </Card>
         </div>
         <div className="flex justify-between items-center">
           <Select>

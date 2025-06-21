@@ -8,16 +8,16 @@ export const getUserWithInfo = async (_req: Request, res: Response) => {
             {
                 $lookup: {
                     from: "hobbies",         // Collection name
-                    localField: "hobby",   
-                    foreignField: "_id",     
+                    localField: "hobby",
+                    foreignField: "_id",
                     as: "hobbyInfo"
                 }
             },
             {
                 $lookup: {
                     from: "departments",             // Collection name (lowercase plural of User model)
-                    localField: "department",     
-                    foreignField: "_id",       
+                    localField: "department",
+                    foreignField: "_id",
                     as: "departmentInfo"
                 }
             },
@@ -29,14 +29,16 @@ export const getUserWithInfo = async (_req: Request, res: Response) => {
 }
 
 export const getUserByHobby = async (req: Request, res: Response) => {
+    const { id } = req.query;
+    console.log(id, "requery")
     try {
         const users = await User.aggregate([
             {
-                $match: { hobby: new mongoose.Types.ObjectId("685681fd0993ff7c624844c4") }
+                $match: { hobby: new mongoose.Types.ObjectId(id as string) }
             },
             {
                 $lookup: {
-                    from: "hobbies",            
+                    from: "hobbies",
                     localField: "hobby",
                     foreignField: "_id",
                     as: "hobbyInfo"
@@ -44,9 +46,9 @@ export const getUserByHobby = async (req: Request, res: Response) => {
             },
             {
                 $lookup: {
-                    from: "departments",             
-                    localField: "department",   
-                    foreignField: "_id",   
+                    from: "departments",
+                    localField: "department",
+                    foreignField: "_id",
                     as: "departmentInfo"
                 }
             },
@@ -67,7 +69,7 @@ export const getUser = async (_req: Request, res: Response) => {
 }
 
 export const createUser = async (req: Request, res: Response) => {
-    try {  
+    try {
         const user = await User.create(req.body);
         res.status(200).json({ success: true, user })
     } catch (error) {

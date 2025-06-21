@@ -9,8 +9,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type Hobby = {
-  title: String,
-  _id: String
+  title: string,
+  _id: string
 }
 export default function WishPage() {
   const [hobbies, setHobbies] = useState<Hobby[]>([])
@@ -42,10 +42,10 @@ export default function WishPage() {
           </h2>
           <div className="grid grid-cols-6 gap-5">
             {
-             hobbies.map((hobby) => {
+              hobbies.map((hobby) => {
                 return (
-                  <Link href={`/user/hobby/${hobby._id}`}>
-                    <Card className="pb-0 rounded-[8px] ">
+                  <Link href={`/user/hobby/${hobby._id}`}  key={hobby._id}>
+                    <Card className="pb-0 rounded-[8px]">
                       <Image
                         src={"/hobby-sport.svg"}
                         width={140}
