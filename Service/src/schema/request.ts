@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const requestSchema = new mongoose.Schema({
+const requestsSchema = new mongoose.Schema({
     from:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -17,5 +17,5 @@ const requestSchema = new mongoose.Schema({
     },
 })
 
-const Request = mongoose.model("Request", requestSchema);
-export default Request;
+const Requests = mongoose.model("Requests", requestsSchema);
+export default Requests;
