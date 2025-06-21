@@ -14,7 +14,7 @@ const userSchema = new mongoose_1.default.Schema({
         required: true
     },
     department: {
-        type: String,
+        type: mongoose_1.default.Schema.Types.ObjectId,
         required: true
     },
     role: {
@@ -23,13 +23,9 @@ const userSchema = new mongoose_1.default.Schema({
         required: true
     },
     hobby: {
-        type: [String],
+        type: mongoose_1.default.Schema.Types.ObjectId,
         required: true
     },
-    job: {
-        type: String,
-        required: true
-    }
 });
 const User = mongoose_1.default.model("User", userSchema);
 exports.default = User;

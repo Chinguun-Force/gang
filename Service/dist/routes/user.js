@@ -7,5 +7,7 @@ const userRouter = (0, express_1.Router)();
 exports.userRouter = userRouter;
 userRouter
     .get("/", user_1.getUser)
+    .get("/with-info", user_1.getUserWithInfo)
+    .get("/by-hobby", user_1.getUserByHobby)
     .post("/", user_1.createUser);
 //# sourceMappingURL=user.js.map
