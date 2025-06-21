@@ -13,11 +13,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const connection_1 = require("./utils/connection");
+const hobby_1 = require("./routes/hobby");
+const user_1 = require("./routes/user");
+const description_1 = require("./routes/description");
+const jobTitle_1 = require("./routes/jobTitle");
+const request_1 = require("./routes/request");
 const port = 8000;
 const app = (0, express_1.default)();
-app.get("/", (req, res) => {
+app.use(express_1.default.json());
+app.use("/hobby", hobby_1.hobbyRouter);
+app.use("/user", user_1.userRouter);
+app.use("/description", description_1.descriptionRouter);
+app.use("/jobTitle", jobTitle_1.jobTitleRouter);
+app.use("/department", description_1.descriptionRouter);
+app.use("/request", request_1.requestsRouter);
+app.get("/", (_req, res) => {
     res.send("Hello World");
 });
+const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, connection_1.connection)();
+    }
+    catch (err) {
+        console.error(err);
+    }
+});
+connectDb();
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`Server is running on port ${port}`);
 }));
