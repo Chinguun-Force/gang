@@ -8,6 +8,10 @@ const hobbySchema = new mongoose_1.default.Schema({
     title: {
         type: String,
         required: true
+    },
+    image: {
+        type: String,
+        required: false
     }
 });
 const Hobby = mongoose_1.default.model("Hobby", hobbySchema);

@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { createUser, getUser, getUserWithInfo ,getNewUsers , getMentors} from "../controller/user";
+import { createUser, getUser, getUserByHobby, getUserWithInfo ,getMentors , getNewUsers } from "../controller/user";
 
 const userRouter = Router();
 userRouter
     .get("/", getUser)
     .get("/with-info", getUserWithInfo)
+    .get("/by-hobby", getUserByHobby)
     .post("/", createUser)
     .get("/mentor", getMentors)
     .get("/new-user", getNewUsers);

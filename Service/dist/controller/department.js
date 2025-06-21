@@ -12,11 +12,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDepartment = exports.getDepartment = void 0;
+exports.createDepartment = exports.getDepartment = exports.getDepartmentWithJobTitle = void 0;
 const department_1 = __importDefault(require("../schema/department"));
+const getDepartmentWithJobTitle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const department = yield department_1.default.aggregate([
+            {
+                $lookup: {
+                    from: "jobtitles", // ✔ MongoDB collection name
+                    localField: "jobTitle", // ✔ field in Department
+                    foreignField: "_id", // ✔ field in JobTitle
+                    as: "jobTitleInfo" // ✔ result field
+                }
+            },
+        ]);
+        res.status(500).json({ success: true, department });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+exports.getDepartmentWithJobTitle = getDepartmentWithJobTitle;
 const getDepartment = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const department = yield department_1.default.find().populate("Description");
+        const department = yield department_1.default.find();
         res.status(200).json({ success: true, department });
     }
     catch (error) {
