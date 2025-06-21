@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     department: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     role: {
@@ -19,13 +19,9 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     hobby: {
-        type: [String],
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    job: {
-        type: String,
-        required: true
-    }
 })
 
 const User = mongoose.model("User", userSchema);
