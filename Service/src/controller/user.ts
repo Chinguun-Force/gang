@@ -7,17 +7,17 @@ export const getUserWithInfo = async (_req: Request, res: Response) => {
         const userWithInfo = await User.aggregate([
             {
                 $lookup: {
-                    from: "hobbies",         
-                    localField: "hobby",    
-                    foreignField: "_id",      
+                    from: "hobbies",         // Collection name
+                    localField: "hobby",    // From Department
+                    foreignField: "_id",       // From JobTitle
                     as: "hobbyInfo"
                 }
             },
             {
                 $lookup: {
-                    from: "departments",            
-                    localField: "department",     
-                    foreignField: "_id",      
+                    from: "departments",             // Collection name (lowercase plural of User model)
+                    localField: "department",     // From Department
+                    foreignField: "_id",       // From User
                     as: "departmentInfo"
                 }
             },

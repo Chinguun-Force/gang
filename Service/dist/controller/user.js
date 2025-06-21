@@ -21,16 +21,16 @@ const getUserWithInfo = (_req, res) => __awaiter(void 0, void 0, void 0, functio
             {
                 $lookup: {
                     from: "hobbies", // Collection name
-                    localField: "hobby", // From Department
-                    foreignField: "_id", // From JobTitle
+                    localField: "hobby",
+                    foreignField: "_id",
                     as: "hobbyInfo"
                 }
             },
             {
                 $lookup: {
                     from: "departments", // Collection name (lowercase plural of User model)
-                    localField: "department", // From Department
-                    foreignField: "_id", // From User
+                    localField: "department",
+                    foreignField: "_id",
                     as: "departmentInfo"
                 }
             },
