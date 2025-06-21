@@ -1,24 +1,35 @@
 import express from "express";
 import { connection } from "./utils/connection";
+import { Request, Response } from "express"
 import { hobbyRouter } from "./routes/hobby";
+import { userRouter } from "./routes/user";
+import { descriptionRouter } from "./routes/description";
+import { jobTitleRouter } from "./routes/jobTitle";
 const port = 8000;
 const app = express();
 
 app.use(express.json());
 
 app.use("/hobby", hobbyRouter);
+app.use("/user", userRouter);
+app.use("/description", descriptionRouter);
+app.use("/jobTitle", jobTitleRouter);
+app.use("/department", descriptionRouter);
 
-app.get("/", (req, res) => {
-    res.send("Hello World")
+
+app.get("/", (_req: Request, res: Response) => {
+  res.send("Hello World")
 })
+
 const connectDb = async () => {
-    try{
-      await connection()
-    }catch(err){
-      console.error(err)
-    }
+  try {
+    await connection()
+  } catch (err) {
+    console.error(err)
   }
-  connectDb()
-app.listen(port, async() => {
+}
+connectDb()
+
+app.listen(port, async () => {
   console.log(`Server is running on port ${port}`)
 })
