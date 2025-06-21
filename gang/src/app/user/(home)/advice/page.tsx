@@ -22,202 +22,196 @@ import {
 } from "@/components/ui/pagination";
 import { Heart, MapPin, Search, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+interface User {
+  _id: string;
+  name: string;
+  lastName: string;
+  department: string;
+  role: string;
+  hobby: string;
+  hobbyInfo: {
+    _id: string;
+    title: string;
+  }[];
+  departmentInfo: {
+    _id: string;
+    title: string;
+    jobTitle?: string;
+  }[];
+}
 
 export default function WishPage() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentRole, setCurrentRole] = useState<"mentor" | "new">("mentor"); 
+  console.log(users)
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  useEffect(() => {
+
+    const filtered = users.filter(user => 
+      currentRole === "mentor" ? user.role === "new" : user.role === "mentor"
+    );
+    setFilteredUsers(filtered);
+  }, [users, currentRole]);
+
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("http://localhost:8000/user/by-hobby");
+      
+      if (response.data.success && response.data.users) {
+        setUsers(response.data.users);
+      } else {
+        console.error("Unexpected response format:", response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleRole = () => {
+    setCurrentRole(currentRole === "mentor" ? "new" : "mentor");
+  };
+
   return (
-    <div className=" px-10 h-screen w-full ">
-      <h1 className="text-stone-800 text-3xl font-semibold py-30 text-center">
-        Таны хүсэлт явуулах боломжтой ажилчид
-      </h1>
+    <div className="px-10 h-screen w-full">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-stone-800 text-3xl font-semibold py-30 text-center">
+          {currentRole === "mentor" 
+            ? "Таны хүсэлт явуулах боломжтой ажилчид" 
+            : "Таны боломжит mentor-ууд"}
+        </h1>
+
+        <Button onClick={toggleRole} variant="outline"   className="opacity-10 w-0 h-0 overflow-hidden">
+          Switch to {currentRole === "mentor" ? "New User" : "Mentor"} View
+        </Button>
+      </div>
 
       <div className="grid gap-10">
         <div className="flex gap-3">
-          <div className="bg-indigo-50 flex gap-4 px-4  items-center rounded-md">
+          <div className="bg-indigo-50 flex gap-4 px-4 items-center rounded-md">
             <Search />
             <Input
               type="text"
-              placeholder="Нэр болон хэлтсээр хайх..."
+              placeholder={currentRole === "mentor" 
+                ? "Шинэ ажилчдын нэр болон хэлтсээр хайх..." 
+                : "Mentor-уудын нэр болон хэлтсээр хайх..."}
               className="w-[300px] focus:outline-none focus:ring-0 focus:border-0 border-0"
-            ></Input>{" "}
+            />
           </div>
           <Select>
             <SelectTrigger className="w-[180px] bg-indigo-50">
               <SelectValue placeholder="Ангилал" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
+              <SelectItem value="all">Бүгд</SelectItem>
+              <SelectItem value="design">Дизайн</SelectItem>
+              <SelectItem value="development">Хөгжүүлэлт</SelectItem>
+              <SelectItem value="marketing">Маркетинг</SelectItem>
             </SelectContent>
           </Select>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="p-3">
-            <div className="grid grid-cols-2">
-              <div className="flex flex-col items-center gap-4">
-                <Avatar className="w-16 h-16">
-                  <AvatarImage src={"AG"} />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <Badge
-                  variant={"outline"}
-                  className="bg-indigo-50 text-blue-900 text-xs font-medium px-6 py-1
-                    "
-                >
-                  Уулзъя л даа
-                </Badge>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div className="flex justify-between w-full items-center">
-                  <h2 className="text-lg font-semibold text-stone-700">
-                    Hulan Jargal
-                  </h2>
-
-                  <Heart />
-                </div>
-                <div className="flex items-center gap-3">
-                  <User /> <p className="text-sm text-stone-500">Дизайнер</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <MapPin />{" "}
-                  <p className="text-sm text-stone-500">Хөгжүүлэлтийн хэлтэс</p>
-                </div>
-              </div>
-            </div>
-
-            <Button
-              variant={"outline"}
-              className="bg-blue-400 text-white text-sm font-medium p"
-            >
-              Уулзах уу{" "}
-            </Button>
-          </Card>
-          <Card className="p-3">
-            <div className="grid grid-cols-2">
-              <div className="flex flex-col items-center gap-4">
-                <div className="flex ">
-                  <Avatar className="w-16 h-16">
-                    <AvatarImage src={"AG"} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>{" "}
-                  <div>
-                    <Badge className="text-xs font-medium bg-[#FFF8E8] py-1 text-gray-900">
-                      Ботго
-                    </Badge>
+        
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <p>Ачааллаж байна...</p>
+          </div>
+        ) : filteredUsers.length === 0 ? (
+          <div className="flex justify-center items-center h-64">
+            <p>{currentRole === "mentor" 
+              ? "Шинэ ажилчид олдсонгүй" 
+              : "Mentor олдсонгүй"}</p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredUsers.map((user) => (
+                <Card key={user._id} className="p-3">
+                  <div className="grid grid-cols-2">
+                    <div className="flex flex-col items-center gap-4">
+                      <Avatar className="w-16 h-16">
+                        <AvatarImage src={user.name.charAt(0) + user.lastName.charAt(0)} />
+                        <AvatarFallback>
+                          {user.name.charAt(0)}{user.lastName.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <Badge
+                        variant={"outline"}
+                        className="bg-indigo-50 text-blue-900 text-xs font-medium px-6 py-1"
+                      >
+                        Уулзъя л даа
+                      </Badge>
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex justify-between w-full items-center">
+                        <h2 className="text-lg font-semibold text-stone-700">
+                          {user.name} {user.lastName}
+                        </h2>
+                        <Heart className="cursor-pointer hover:fill-red-500" />
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <User /> 
+                        <p className="text-sm text-stone-500">
+                          {user.departmentInfo[0]?.title || "Unknown Department"}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <MapPin /> 
+                        <p className="text-sm text-stone-500">
+                          {user.hobbyInfo[0]?.title || "No Hobby"}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <Badge
-                  variant={"outline"}
-                  className="bg-indigo-50 text-blue-900 text-xs font-medium px-6 py-1
-                    "
-                >
-                  Уулзъя л даа
-                </Badge>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div className="flex justify-between w-full items-center">
-                  <h2 className="text-lg font-semibold text-stone-700">
-                    Hulan Jargal
-                  </h2>
 
-                  <Heart />
-                </div>
-                <div className="flex items-center gap-3">
-                  <User /> <p className="text-sm text-stone-500">Дизайнер</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <MapPin />{" "}
-                  <p className="text-sm text-stone-500">Хөгжүүлэлтийн хэлтэс</p>
-                </div>
-              </div>
+                  <Button
+                    variant={"outline"}
+                    className="bg-blue-400 text-white text-sm font-medium mt-4 w-full hover:bg-blue-500"
+                  >
+                    Уулзах уу
+                  </Button>
+                </Card>
+              ))}
             </div>
-
-            <Button
-              variant={"outline"}
-              className="bg-blue-400 text-white text-sm font-medium p"
-            >
-              Уулзах уу{" "}
-            </Button>
-          </Card>
-          <Card className="p-3">
-            <div className="grid grid-cols-2">
-              <div className="flex flex-col items-center gap-4">
-                <div className="flex ">
-                  <Avatar className="w-16 h-16">
-                    <AvatarImage src={"AG"} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>{" "}
-                  <div>
-                    <Badge className="text-xs font-medium bg-[#FFF8E8] py-1 text-gray-900">
-                      Ботго
-                    </Badge>
-                  </div>
-                </div>
-                <Badge
-                  variant={"outline"}
-                  className="bg-indigo-50 text-blue-900 text-xs font-medium px-6 py-1
-                    "
-                >
-                  Уулзъя л даа
-                </Badge>
-              </div>
-              <div className="flex flex-col gap-3">
-                <div className="flex justify-between w-full items-center">
-                  <h2 className="text-lg font-semibold text-stone-700">
-                    Hulan Jargal
-                  </h2>
-
-                  <Heart />
-                </div>
-                <div className="flex items-center gap-3">
-                  <User /> <p className="text-sm text-stone-500">Дизайнер</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <MapPin />{" "}
-                  <p className="text-sm text-stone-500">Хөгжүүлэлтийн хэлтэс</p>
-                </div>
-              </div>
+            <div className="flex justify-between items-center">
+              <Select>
+                <SelectTrigger className="w-[180px] bg-indigo-50">
+                  <SelectValue placeholder="Хүний тоо" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                </SelectContent>
+              </Select>
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious href="#" />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#">1</PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationNext href="#" />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </div>
-
-            <Button
-              variant={"outline"}
-              className="bg-blue-400 text-white text-sm font-medium p"
-            >
-              Уулзах уу{" "}
-            </Button>
-            {/* <Dialog>
-                  <DialogTrigger>Open</DialogTrigger>
-                </Dialog> */}
-          </Card>
-        </div>
-        <div className="flex justify-between items-center">
-          <Select>
-            <SelectTrigger className="w-[180px] bg-indigo-50">
-              <SelectValue placeholder="Хүний тоо" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">1</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

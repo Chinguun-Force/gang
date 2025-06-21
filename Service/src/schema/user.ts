@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["mentor", "new", "old"],
+        enum: ["mentor", "new"],
         required: true
     },
     hobby: {

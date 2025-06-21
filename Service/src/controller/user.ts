@@ -7,17 +7,17 @@ export const getUserWithInfo = async (_req: Request, res: Response) => {
         const userWithInfo = await User.aggregate([
             {
                 $lookup: {
-                    from: "hobbies",         // Collection name
-                    localField: "hobby",    // From Department
-                    foreignField: "_id",       // From JobTitle
+                    from: "hobbies",         
+                    localField: "hobby",    
+                    foreignField: "_id",      
                     as: "hobbyInfo"
                 }
             },
             {
                 $lookup: {
-                    from: "departments",             // Collection name (lowercase plural of User model)
-                    localField: "department",     // From Department
-                    foreignField: "_id",       // From User
+                    from: "departments",            
+                    localField: "department",     
+                    foreignField: "_id",      
                     as: "departmentInfo"
                 }
             },
@@ -32,11 +32,11 @@ export const getUserByHobby = async (req: Request, res: Response) => {
     try {
         const users = await User.aggregate([
             {
-                $match: { hobby: new mongoose.Types.ObjectId("6855348fa6d991f95ae963d4") }
+                $match: { hobby: new mongoose.Types.ObjectId("685681fd0993ff7c624844c4") }
             },
             {
                 $lookup: {
-                    from: "hobbies",            // collection name
+                    from: "hobbies",            
                     localField: "hobby",
                     foreignField: "_id",
                     as: "hobbyInfo"
@@ -44,9 +44,9 @@ export const getUserByHobby = async (req: Request, res: Response) => {
             },
             {
                 $lookup: {
-                    from: "departments",             // Collection name (lowercase plural of User model)
-                    localField: "department",     // From Department
-                    foreignField: "_id",       // From User
+                    from: "departments",             
+                    localField: "department",   
+                    foreignField: "_id",   
                     as: "departmentInfo"
                 }
             },
@@ -67,10 +67,29 @@ export const getUser = async (_req: Request, res: Response) => {
 }
 
 export const createUser = async (req: Request, res: Response) => {
-    try {
+    try {  
         const user = await User.create(req.body);
         res.status(200).json({ success: true, user })
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
+
+export const getNewUsers = async (req, res) => {
+    try {
+        const newUsers = await User.find({ role: "new" });
+        res.status(200).json(newUsers);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const getMentors = async (req, res) => {
+    try {
+        const mentors = await User.find({ role: "mentor" });
+        res.status(200).json(mentors);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

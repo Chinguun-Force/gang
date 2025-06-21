@@ -6,10 +6,10 @@ export const getDepartmentWithJobTitle = async (req: Request, res: Response) => 
         const department = await Department.aggregate([
             {
                 $lookup: {
-                    from: "jobtitles",       // ✔ MongoDB collection name
-                    localField: "jobTitle",  // ✔ field in Department
-                    foreignField: "_id",     // ✔ field in JobTitle
-                    as: "jobTitleInfo"       // ✔ result field
+                    from: "jobtitles",       
+                    localField: "jobTitle",  
+                    foreignField: "_id",    
+                    as: "jobTitleInfo"     
                 }
             },
         ])
