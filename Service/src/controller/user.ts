@@ -32,11 +32,11 @@ export const getUserByHobby = async (req: Request, res: Response) => {
     try {
         const users = await User.aggregate([
             {
-                $match: { hobby: new mongoose.Types.ObjectId("6855348fa6d991f95ae963d4") }
+                $match: { hobby: new mongoose.Types.ObjectId("685681fd0993ff7c624844c4") }
             },
             {
                 $lookup: {
-                    from: "hobbies",            // collection name
+                    from: "hobbies",            
                     localField: "hobby",
                     foreignField: "_id",
                     as: "hobbyInfo"
@@ -44,9 +44,9 @@ export const getUserByHobby = async (req: Request, res: Response) => {
             },
             {
                 $lookup: {
-                    from: "departments",             // Collection name (lowercase plural of User model)
-                    localField: "department",     // From Department
-                    foreignField: "_id",       // From User
+                    from: "departments",             
+                    localField: "department",   
+                    foreignField: "_id",   
                     as: "departmentInfo"
                 }
             },
