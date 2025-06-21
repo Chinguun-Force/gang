@@ -8,16 +8,16 @@ export const getUserWithInfo = async (_req: Request, res: Response) => {
             {
                 $lookup: {
                     from: "hobbies",         // Collection name
-                    localField: "hobby",    // From Department
-                    foreignField: "_id",       // From JobTitle
+                    localField: "hobby",   
+                    foreignField: "_id",     
                     as: "hobbyInfo"
                 }
             },
             {
                 $lookup: {
                     from: "departments",             // Collection name (lowercase plural of User model)
-                    localField: "department",     // From Department
-                    foreignField: "_id",       // From User
+                    localField: "department",     
+                    foreignField: "_id",       
                     as: "departmentInfo"
                 }
             },
