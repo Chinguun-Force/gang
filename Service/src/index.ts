@@ -5,6 +5,7 @@ import { hobbyRouter } from "./routes/hobby";
 import { userRouter } from "./routes/user";
 import { descriptionRouter } from "./routes/description";
 import { jobTitleRouter } from "./routes/jobTitle";
+import { requestsRouter } from "./routes/request";
 const port = 8000;
 const app = express();
 
@@ -15,6 +16,7 @@ app.use("/user", userRouter);
 app.use("/description", descriptionRouter);
 app.use("/jobTitle", jobTitleRouter);
 app.use("/department", descriptionRouter);
+app.use("/request", requestsRouter);
 
 
 app.get("/", (_req: Request, res: Response) => {
