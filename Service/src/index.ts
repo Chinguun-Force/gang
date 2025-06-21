@@ -6,6 +6,7 @@ import { userRouter } from "./routes/user";
 import { descriptionRouter } from "./routes/description";
 import { jobTitleRouter } from "./routes/jobTitle";
 import { requestsRouter } from "./routes/request";
+import { departmentRouter } from "./routes/department";
 const port = 8000;
 const app = express();
 
@@ -15,7 +16,7 @@ app.use("/hobby", hobbyRouter);
 app.use("/user", userRouter);
 app.use("/description", descriptionRouter);
 app.use("/jobTitle", jobTitleRouter);
-app.use("/department", descriptionRouter);
+app.use("/department", departmentRouter);
 app.use("/request", requestsRouter);
 
 
