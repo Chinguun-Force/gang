@@ -47,9 +47,8 @@ export default function WishPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-const [currentRole, setCurrentRole] = useState<"mentor" | "new">("mentor"); 
-const [currentUser , setCurrentUser] = useState<any>(null)
-  // console.log(currentUser.role)
+  const [currentUser , setCurrentUser] = useState<any>(null)
+
 
 
   useEffect(() => {
