@@ -78,7 +78,7 @@ const LoginPage = () => {
       localStorage.setItem('currentUser', JSON.stringify(foundUser))
       
       if (foundUser.role === 'mentor') {
-        router.push('/user/mentor')
+        router.push('/user')
       } else {
         router.push('/user')
       }
