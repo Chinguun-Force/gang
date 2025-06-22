@@ -7,34 +7,34 @@ export default function HomePage() {
   return (
     <div>
  
-      <section className="h-screen px-10 relative flex items-center justify-center w-full py-20">
+      <section className="h-[844px] px-10 relative flex items-center justify-center w-full py-20">
         <Image
           width={400}
           height={310}
-          src={"/home-1.svg"}
+          src={"/img3.webp"}
           alt="home-1"
-          className="absolute top-[112px] left-20 "
+          className="absolute top-[112px] left-10 "
         />
         <Image
           width={330}
           height={330}
-          src={"/home-2.svg"}
+          src={"/img4.webp"}
           alt="home-2"
           className="absolute top-[112px]  right-20"
         />
         <Image
           width={300}
           height={300}
-          src={"/home-3.svg"}
+          src={"/img2.webp"}
           alt="home-3"
-          className="absolute bottom-20 left-20"
+          className="absolute bottom-0 left-20"
         />
         <Image
           width={400}
           height={280}
-          src={"/home-4.svg"}
+          src={"/img1.webp"}
           alt="home-4"
-          className="absolute bottom-15 right-20"
+          className="absolute bottom-5 right-40"
         />
         <div className="flex flex-col">
           <h1 className="font-semibold text-[36px]">
@@ -48,9 +48,9 @@ export default function HomePage() {
       <section className="h-screen grid grid-rows-2 px-20 bg-slate-50 py-10">
         <div className="flex flex-row  gap-10 items-center justify-between">
           <Image
-            width={400}
-            height={200}
-            src={"/home-1.svg"}
+            width={640}
+            height={300}
+            src={"/advice.webp"}
             alt="home-1"
             className=""
           />
@@ -90,9 +90,9 @@ export default function HomePage() {
             </Link>
           </div>
           <Image
-            width={400}
-            height={200}
-            src={"/home-4.svg"}
+            width={640}
+            height={300}
+            src={"/hobby.webp"}
             alt="home-4"
             className=""
           />

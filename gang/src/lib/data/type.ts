@@ -3,7 +3,8 @@ export type User = {
     email: string
     name: string
     lastName: string
-    role : "new" | "old" | "mentor"
+    role : "new" | "old" | "mentor",
+    password: string
     hobby: string[]
     job: string
     createdAt?: Date

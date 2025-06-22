@@ -47,27 +47,31 @@ export default function WishPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentRole, setCurrentRole] = useState<"mentor" | "new">("mentor"); 
-  console.log(users)
+const [currentRole, setCurrentRole] = useState<"mentor" | "new">("mentor"); 
+const [currentUser , setCurrentUser] = useState<any>(null)
+  // console.log(currentUser.role)
+
+
   useEffect(() => {
+    const currentUserString = localStorage.getItem('currentUser');
+    setCurrentUser( currentUserString ? JSON.parse(currentUserString) : null)
     fetchUsers();
   }, []);
 
   useEffect(() => {
-
     const filtered = users.filter(user => 
-      currentRole === "mentor" ? user.role === "new" : user.role === "mentor"
+      currentUser.role === "mentor" ? user.role === "new" : user.role === "mentor"
     );
     setFilteredUsers(filtered);
-  }, [users, currentRole]);
+  }, [users, currentUser]);
 
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:8000/user/by-hobby");
+      const response = await axios.get("http://localhost:8000/user/with-info");
       
-      if (response.data.success && response.data.users) {
-        setUsers(response.data.users);
+      if (response.data.success && response.data.userWithInfo) {
+        setUsers(response.data.userWithInfo);
       } else {
         console.error("Unexpected response format:", response.data);
       }
@@ -77,23 +81,21 @@ export default function WishPage() {
       setLoading(false);
     }
   };
+  if (currentUser === null) {
+    return <div className="flex justify-center items-center h-screen">
+      Loading user data...
+    </div>;
+  }
 
-  const toggleRole = () => {
-    setCurrentRole(currentRole === "mentor" ? "new" : "mentor");
-  };
 
   return (
     <div className="px-10 h-screen w-full">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-stone-800 text-3xl font-semibold py-30 text-center">
-          {currentRole === "mentor" 
+          {currentUser?.role === "mentor" 
             ? "Таны хүсэлт явуулах боломжтой ажилчид" 
             : "Таны боломжит mentor-ууд"}
         </h1>
-
-        <Button onClick={toggleRole} variant="outline"   className="opacity-10 w-0 h-0 overflow-hidden">
-          Switch to {currentRole === "mentor" ? "New User" : "Mentor"} View
-        </Button>
       </div>
 
       <div className="grid gap-10">
@@ -102,7 +104,7 @@ export default function WishPage() {
             <Search />
             <Input
               type="text"
-              placeholder={currentRole === "mentor" 
+              placeholder={currentUser?.role === "mentor" 
                 ? "Шинэ ажилчдын нэр болон хэлтсээр хайх..." 
                 : "Mentor-уудын нэр болон хэлтсээр хайх..."}
               className="w-[300px] focus:outline-none focus:ring-0 focus:border-0 border-0"
@@ -127,7 +129,7 @@ export default function WishPage() {
           </div>
         ) : filteredUsers.length === 0 ? (
           <div className="flex justify-center items-center h-64">
-            <p>{currentRole === "mentor" 
+            <p>{currentUser?.role === "mentor" 
               ? "Шинэ ажилчид олдсонгүй" 
               : "Mentor олдсонгүй"}</p>
           </div>
