@@ -11,11 +11,13 @@ import { useEffect, useState } from "react";
 type Hobby = {
   title: string,
   _id: string
+  image: string
 }
 export default function WishPage() {
   const [hobbies, setHobbies] = useState<Hobby[]>([])
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL
   const getHobbies = async () => {
-    const response = await axios.get(`${BASE_URl}/hobby`);
+    const response = await axios.get(`${baseUrl}/hobby`);
     setHobbies(response.data)
   }
 
@@ -23,7 +25,7 @@ export default function WishPage() {
     getHobbies();
   }, [])
 
-  console.log(BASE_URl, "base")
+  console.log(baseUrl, "base")
   return (
     <div className="p-10 h-screen w-full ">
       <div>
@@ -40,18 +42,18 @@ export default function WishPage() {
           <h2 className="text-slate-800 text-2xl font-normal pb-10">
             Та өөрийн дуртай хэдэн ч сэдвийг сонгосон болно ☺️
           </h2>
-          <div className="grid grid-cols-6 gap-5">
+          <div className="grid grid-cols-4 gap-5">
             {
               hobbies.map((hobby) => {
                 return (
                   <Link href={`/user/hobby/${hobby._id}`}  key={hobby._id}>
-                    <Card className="pb-0 rounded-[8px]">
+                    <Card className="pb-0 rounded-[8px] w-[202px] h-[228px] grid grid-rows-[1fr_auto]">
                       <Image
-                        src={"/hobby-sport.svg"}
+                        src={hobby.image}
                         width={140}
-                        height={224}
+                        height={190}
                         alt="sport"
-                        className="px-[31px]"
+                        className="object-fit"
                       />
                       <p
                         className="bg-slate-50 flex items-center justify-center rouded-[4px]
