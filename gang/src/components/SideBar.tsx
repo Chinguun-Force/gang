@@ -5,7 +5,7 @@ import React from 'react'
 const SideBar = () => {
   return (
     <div
-        className='w-[302px] bg-white h-screen px-5 py-10 flex flex-col gap-10'
+        className='w-[302px] bg-white h-auto px-5 py-10 flex flex-col gap-10'
     >
         <div className='flex items-center gap-3 p-2'>
             <Image
