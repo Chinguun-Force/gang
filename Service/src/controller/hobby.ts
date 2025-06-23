@@ -15,7 +15,7 @@ export const createHobby = async (req, res) => {
     }
 }
 
-export const getHobby = async (req: Request, res: Response) => {
+export const getHobby = async (_req: Request, res: Response) => {
     const hobby = await Hobby.find();
     res.status(200).json(hobby);
 }

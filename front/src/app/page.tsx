@@ -63,11 +63,11 @@ export default function Home() {
                       className="absolute bottom-1 left-250"
                   />
                    <Image
-                    width={562}
-                    height={562}
+                    width={362}
+                    height={362}
                     src={"/content2.png"}
                     alt="home-1"
-                    className="absolute bottom-14 right-20"
+                    className="absolute bottom-20 right-23"
                   />
                   </div>
   

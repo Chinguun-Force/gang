@@ -31,7 +31,7 @@ type Department = {
 jobTitle: string,
 title: string,
 _id: string
-} []
+}   
 
 type Hobby = {
 title: string,
@@ -114,7 +114,7 @@ export default function HobbyInsertPage() {
                       </div>
                       <div className="flex items-center gap-3">
                         <MapPin />{" "}
-                        <p className="text-sm text-stone-500">{user.departmentInfo[0].title}</p>
+                        <p className="text-sm text-stone-500">{user.departmentInfo?.title}</p>
                       </div>
                     </div>
                   </div>

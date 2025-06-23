@@ -40,25 +40,25 @@ interface User {
     _id: string;
     title: string;
     jobTitle?: string;
-  }[];
+  };
 }
 
 export default function WishPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentUser , setCurrentUser] = useState<any>(null)
+  const [currentUser, setCurrentUser] = useState<any>(null)
 
 
 
   useEffect(() => {
     const currentUserString = localStorage.getItem('currentUser');
-    setCurrentUser( currentUserString ? JSON.parse(currentUserString) : null)
+    setCurrentUser(currentUserString ? JSON.parse(currentUserString) : null)
     fetchUsers();
   }, []);
 
   useEffect(() => {
-    const filtered = users.filter(user => 
+    const filtered = users.filter(user =>
       currentUser.role === "mentor" ? user.role === "new" : user.role === "mentor"
     );
     setFilteredUsers(filtered);
@@ -68,7 +68,7 @@ export default function WishPage() {
     try {
       setLoading(true);
       const response = await axios.get("http://localhost:8000/user/with-info");
-      
+
       console.log("Response data:", response.data);
       if (response.data.success && response.data.userWithInfo) {
         setUsers(response.data.userWithInfo);
@@ -87,13 +87,17 @@ export default function WishPage() {
     </div>;
   }
 
+  const onChangeValue = (event: any) => {
+    // console.log(event.target.value, filteredUsers)
+  }
+
 
   return (
     <div className="px-10 h-screen w-full">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-stone-800 text-3xl font-semibold py-30 text-center">
-          {currentUser?.role === "mentor" 
-            ? "Таны хүсэлт явуулах боломжтой ажилчид" 
+          {currentUser?.role === "mentor"
+            ? "Таны хүсэлт явуулах боломжтой ажилчид"
             : "Таны боломжит mentor-ууд"}
         </h1>
       </div>
@@ -103,9 +107,10 @@ export default function WishPage() {
           <div className="bg-indigo-50 flex gap-4 px-4 items-center rounded-md">
             <Search />
             <Input
+              onChange={onChangeValue}
               type="text"
-              placeholder={currentUser?.role === "mentor" 
-                ? "Шинэ ажилчдын нэр болон хэлтсээр хайх..." 
+              placeholder={currentUser?.role === "mentor"
+                ? "Шинэ ажилчдын нэр болон хэлтсээр хайх..."
                 : "Mentor-уудын нэр болон хэлтсээр хайх..."}
               className="w-[300px] focus:outline-none focus:ring-0 focus:border-0 border-0"
             />
@@ -122,15 +127,15 @@ export default function WishPage() {
             </SelectContent>
           </Select>
         </div>
-        
+
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <p>Ачааллаж байна...</p>
           </div>
         ) : filteredUsers.length === 0 ? (
           <div className="flex justify-center items-center h-64">
-            <p>{currentUser?.role === "mentor" 
-              ? "Шинэ ажилчид олдсонгүй" 
+            <p>{currentUser?.role === "mentor"
+              ? "Шинэ ажилчид олдсонгүй"
               : "Mentor олдсонгүй"}</p>
           </div>
         ) : (
@@ -161,13 +166,13 @@ export default function WishPage() {
                         <Heart className="cursor-pointer hover:fill-red-500" />
                       </div>
                       <div className="flex items-center gap-3">
-                        <User /> 
+                        <User />
                         <p className="text-sm text-stone-500">
-                          {user.departmentInfo[0]?.title || "Unknown Department"}
+                          {user.departmentInfo?.title || "Unknown Department"}
                         </p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <MapPin /> 
+                        <MapPin />
                         <p className="text-sm text-stone-500">
                           {user.hobbyInfo[0]?.title || "No Hobby"}
                         </p>
