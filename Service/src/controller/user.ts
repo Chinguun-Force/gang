@@ -7,7 +7,7 @@ export const getUserWithInfo = async (_req: Request, res: Response) => {
         const userWithInfo = await User.aggregate([
             {
                 $lookup: {
-                    from: "hobbies",         // Collection name
+                    from: "hobbies",       
                     localField: "hobby",
                     foreignField: "_id",
                     as: "hobbyInfo"
@@ -15,12 +15,34 @@ export const getUserWithInfo = async (_req: Request, res: Response) => {
             },
             {
                 $lookup: {
-                    from: "departments",             // Collection name (lowercase plural of User model)
+                    from: "departments", 
                     localField: "department",
                     foreignField: "_id",
-                    as: "departmentInfo"
+                    as: "departmentInfo",
+                    pipeline: [
+                        {
+                            $lookup: {
+                                from: "jobtitles",
+                                localField: "jobTitle",
+                                foreignField: "_id",
+                                as: "jobTitleInfo"
+                            }
+                        }
+                    ]
                 }
             },
+            {
+                $unwind: {
+                    path: "$departmentInfo",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $unwind: {
+                    path: "$departmentInfo.jobTitleInfo",
+                    preserveNullAndEmptyArrays: true
+                }
+            }
         ])
         res.status(200).json({ success: true, userWithInfo })
     } catch (error) {
@@ -52,6 +74,18 @@ export const getUserByHobby = async (req: Request, res: Response) => {
                     as: "departmentInfo"
                 }
             },
+            {
+                $unwind: {
+                    path: "$hobbyInfo",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $unwind: {
+                    path: "$departmentInfo",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
         ]);
         res.status(200).json({ success: true, users })
     } catch (error) {
@@ -77,7 +111,7 @@ export const createUser = async (req: Request, res: Response) => {
     }
 }
 
-export const getNewUsers = async (req, res) => {
+export const getNewUsers = async (_req: Request, res: Response) => {
     try {
         const newUsers = await User.find({ role: "new" });
         res.status(200).json(newUsers);
@@ -87,7 +121,7 @@ export const getNewUsers = async (req, res) => {
 };
 
 
-export const getMentors = async (req, res) => {
+export const getMentors = async (_req: Request, res: Response) => {
     try {
         const mentors = await User.find({ role: "mentor" });
         res.status(200).json(mentors);
@@ -95,3 +129,4 @@ export const getMentors = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+ 

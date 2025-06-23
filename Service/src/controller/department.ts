@@ -12,6 +12,12 @@ export const getDepartmentWithJobTitle = async (req: Request, res: Response) => 
                     as: "jobTitleInfo"     
                 }
             },
+            {
+                $unwind: {
+                    path: "$jobTitleInfo",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
         ])
         res.status(500).json({ success: true, department })
     } catch (error) {
