@@ -1,3 +1,4 @@
+"use client";
 import {
   BookOpen,
   Calendar,
@@ -23,6 +24,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -31,7 +34,7 @@ const items = [
     item: [
       {
         title: "Зөвлөгөө",
-        url: "/user/#",
+        url: "/user/advice",
         icon: MessageSquare,
       },
       {
@@ -74,10 +77,13 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname(); // одоогийн path-ийг авна
+
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
+         <Link href="/user" className="no-underline">
           <SidebarGroupLabel className="flex items-center gap-3 my-10">
             <Avatar className="w-[60px] h-[60px] rounded-md">
               <AvatarImage src="https://github.com/shadcn.png" />
@@ -91,30 +97,37 @@ export function AppSidebar() {
                 ajil
               </p>
             </div>
-          </SidebarGroupLabel>
+          </SidebarGroupLabel></Link>
 
           <SidebarGroupContent>
             {items.map((group, groupIdx) => (
               <SidebarMenu key={groupIdx}>
-                {/* Optionally display group name if it exists */}
                 {group.name && (
                   <SidebarGroupLabel className="px-3 py-1 text-xs text-muted-foreground">
                     {group.name}
                   </SidebarGroupLabel>
                 )}
-                {group.item.map((menuItem, index) => (
-                  <SidebarMenuItem key={index}>
-                    <SidebarMenuButton asChild>
-                      <a
-                        href={menuItem.url}
-                        className="flex items-center gap-2"
-                      >
-                        <menuItem.icon className="w-4 h-4" />
-                        <span>{menuItem.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {group.item.map((menuItem, index) => {
+                  const isActive = pathname === menuItem.url;
+
+                  return (
+                    <SidebarMenuItem key={index}>
+                      <SidebarMenuButton asChild>
+                        <a
+                          href={menuItem.url}
+                          className={`flex items-center gap-2 px-3 py-2 rounded-md ${
+                            isActive
+                              ? "bg-blue-400 text-white"
+                              : "text-slate-700 hover:bg-slate-100"
+                          }`}
+                        >
+                          <menuItem.icon className="w-4 h-4" />
+                          <span>{menuItem.title}</span>
+                        </a>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             ))}
           </SidebarGroupContent>

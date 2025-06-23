@@ -69,6 +69,7 @@ export default function WishPage() {
       setLoading(true);
       const response = await axios.get("http://localhost:8000/user/with-info");
       
+      console.log("Response data:", response.data);
       if (response.data.success && response.data.userWithInfo) {
         setUsers(response.data.userWithInfo);
       } else {
