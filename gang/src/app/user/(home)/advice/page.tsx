@@ -24,6 +24,7 @@ import { Heart, MapPin, Search, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { StringDecoder } from "string_decoder";
 
 interface User {
   _id: string;
@@ -35,12 +36,17 @@ interface User {
   hobbyInfo: {
     _id: string;
     title: string;
+    image?: string
   }[];
   departmentInfo: {
     _id: string;
     title: string;
     jobTitle?: string;
-  }[];
+    jobTitleInfo: {
+      _id: string,
+      title: string
+  }
+  };
 }
 
 export default function WishPage() {
@@ -49,7 +55,7 @@ export default function WishPage() {
   const [loading, setLoading] = useState(true);
   const [currentUser , setCurrentUser] = useState<any>(null)
 
-
+console.log(users, "users")
 
   useEffect(() => {
     const currentUserString = localStorage.getItem('currentUser');
@@ -162,13 +168,13 @@ export default function WishPage() {
                       <div className="flex items-center gap-3">
                         <User /> 
                         <p className="text-sm text-stone-500">
-                          {user.departmentInfo[0]?.title || "Unknown Department"}
+                          {user.departmentInfo?.title || "Unknown Department"}
                         </p>
                       </div>
                       <div className="flex items-center gap-3">
                         <MapPin /> 
                         <p className="text-sm text-stone-500">
-                          {user.hobbyInfo[0]?.title || "No Hobby"}
+                          {user.hobbyInfo[0].title || "No Hobby"}
                         </p>
                       </div>
                     </div>
