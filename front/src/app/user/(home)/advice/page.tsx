@@ -48,9 +48,8 @@ export default function WishPage() {
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<any>(null)
-
-
-
+  console.log(currentUser)
+  // console.log(users)
   useEffect(() => {
     const currentUserString = localStorage.getItem('currentUser');
     setCurrentUser(currentUserString ? JSON.parse(currentUserString) : null)
