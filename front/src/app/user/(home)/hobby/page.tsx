@@ -47,20 +47,19 @@ export default function WishPage() {
               hobbies.map((hobby) => {
                 return (
                   <Link href={`/user/hobby/${hobby._id}`} key={hobby._id}>
-                    <Card className="pb-0 rounded-[8px] w-[202px] h-[228px] grid grid-rows-[1fr_auto]">
-                      <div className="flex items-center justify-center w-full h-full overflow-hidden">
+                     <Card className="p-0 w-[202px] h-[288px] flex flex-col gap-3">
+                      <div className=" w-full rounded-3xl h-[224px] bg-white overflow-hidden relative">
                         <Image
                           src={hobby.image}
-                          width={140}
-                          height={190}
+                          fill={true}
                           alt="sport"
-                          style={{objectFit: "contain"}}
+                          className="place-self-center"
+                          style={{ objectFit: "contain" }}
                         />
                       </div>
-                      <p className="bg-slate-50 flex items-center justify-center rounded-[4px] py-3">
+                      <p className="bg-slate-50 text-center rounded-b-2xl text-lg py-3 text-slate-800">
                         {hobby.title}
                       </p>
-
                     </Card>
                   </Link>
                 );
