@@ -115,7 +115,7 @@ export function AppSidebar() {
                       <SidebarMenuButton asChild>
                         <a
                           href={menuItem.url}
-                          className={`flex items-center gap-2 px-3 py-2 rounded-md ${
+                          className={`flex items-center gap-2 px-3 py-2 rounded-full ${
                             isActive
                               ? "bg-blue-400 text-white"
                               : "text-slate-700 hover:bg-slate-100"
