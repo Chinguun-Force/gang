@@ -12,9 +12,17 @@
         },
         description: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Description",
+            ref: "Description"
+        },
+        date : {
+            type: Date,
             required: true
         },
+        status : {
+            type: String,
+            enum: ["pending", "confirmed", "rejected"],
+            default: "pending"
+        }
     })
 
     const Requests = mongoose.model("Requests", requestsSchema);
