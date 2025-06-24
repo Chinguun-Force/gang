@@ -33,7 +33,7 @@ const FloatingBubble = ({ delay = 0, duration = 8, size = 60, initialX = "50%", 
   )
 }
 
-// Rising bubble animation
+
 const RisingBubble = ({ delay = 0 }) => {
   const bubble = {
     size: Math.random() * 30 + 15,
