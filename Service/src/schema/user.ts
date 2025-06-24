@@ -13,6 +13,14 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
+    email:{
+          type: String,
+        required: true
+    },
+    password:{
+          type: String,
+        required: true
+    },
     role: {
         type: String,
         enum: ["mentor", "new"],
