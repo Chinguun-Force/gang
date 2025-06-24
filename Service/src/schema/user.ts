@@ -18,9 +18,21 @@ const userSchema = new mongoose.Schema({
         enum: ["mentor", "new"],
         required: true
     },
+    experience: {
+        type: String,
+        required: true
+    },
     hobby: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
+    },
+     menteesCount: {
+        type: Number,
+        default: 0
+    },
+    currentMentor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     },
 })
 
