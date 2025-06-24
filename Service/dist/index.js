@@ -20,6 +20,7 @@ const description_1 = require("./routes/description");
 const jobTitle_1 = require("./routes/jobTitle");
 const request_1 = require("./routes/request");
 const department_1 = require("./routes/department");
+const auth_1 = require("./routes/auth");
 const cors_1 = __importDefault(require("cors"));
 const port = 8000;
 const app = (0, express_1.default)();
@@ -31,6 +32,7 @@ app.use("/description", description_1.descriptionRouter);
 app.use("/jobTitle", jobTitle_1.jobTitleRouter);
 app.use("/department", department_1.departmentRouter);
 app.use("/request", request_1.requestsRouter);
+app.use("/login", auth_1.authRouter);
 app.get("/", (_req, res) => {
     res.send("Hello World");
 });

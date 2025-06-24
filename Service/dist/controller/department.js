@@ -19,10 +19,16 @@ const getDepartmentWithJobTitle = (req, res) => __awaiter(void 0, void 0, void 0
         const department = yield department_1.default.aggregate([
             {
                 $lookup: {
-                    from: "jobtitles", // ✔ MongoDB collection name
-                    localField: "jobTitle", // ✔ field in Department
-                    foreignField: "_id", // ✔ field in JobTitle
-                    as: "jobTitleInfo" // ✔ result field
+                    from: "jobtitles",
+                    localField: "jobTitle",
+                    foreignField: "_id",
+                    as: "jobTitleInfo"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$jobTitleInfo",
+                    preserveNullAndEmptyArrays: true
                 }
             },
         ]);

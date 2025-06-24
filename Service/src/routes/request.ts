@@ -1,9 +1,17 @@
 import { Router } from "express";
-import { createRequest, getRequest } from "../controller/request";
+import { 
+    getRequests, 
+    createRequest, 
+    updateRequest,
+    endMentorship 
+} from "../controller/request";
 
 const requestsRouter = Router();
+
 requestsRouter
-    .get("/", getRequest)
+    .get("/", getRequests)
     .post("/", createRequest)
+    .put("/:id", updateRequest)
+    .post("/:id/end", endMentorship);
 
 export { requestsRouter };

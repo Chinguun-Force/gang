@@ -9,5 +9,7 @@ userRouter
     .get("/", user_1.getUser)
     .get("/with-info", user_1.getUserWithInfo)
     .get("/by-hobby", user_1.getUserByHobby)
-    .post("/", user_1.createUser);
+    .post("/", user_1.createUser)
+    .get("/mentor", user_1.getMentors)
+    .get("/new-user", user_1.getNewUsers);
 //# sourceMappingURL=user.js.map

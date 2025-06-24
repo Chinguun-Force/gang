@@ -30,7 +30,7 @@ const createHobby = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.createHobby = createHobby;
-const getHobby = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getHobby = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const hobby = yield hobby_1.default.find();
     res.status(200).json(hobby);
 });

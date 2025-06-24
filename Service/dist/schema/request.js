@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const requestsSchema = new mongoose_1.default.Schema({
+const requestSchema = new mongoose_1.default.Schema({
     from: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: "User",
@@ -15,12 +15,29 @@ const requestsSchema = new mongoose_1.default.Schema({
         ref: "User",
         required: true
     },
-    description: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "Description",
+    message: {
+        type: String,
         required: true
     },
-});
-const Requests = mongoose_1.default.model("Requests", requestsSchema);
-exports.default = Requests;
+    status: {
+        type: String,
+        enum: ["pending", "accepted", "declined"],
+        default: "pending"
+    },
+    meetingDate: {
+        type: Date
+    },
+    meetingLocation: {
+        type: String
+    },
+    mentorNotes: {
+        type: String
+    },
+    isActive: {
+        type: Boolean,
+        default: false
+    }
+}, { timestamps: true });
+const Request = mongoose_1.default.model("Request", requestSchema);
+exports.default = Request;
 //# sourceMappingURL=request.js.map

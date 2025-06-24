@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = exports.getUser = exports.getUserByHobby = exports.getUserWithInfo = void 0;
+exports.getMentors = exports.getNewUsers = exports.createUser = exports.getUser = exports.getUserByHobby = exports.getUserWithInfo = void 0;
 const user_1 = __importDefault(require("../schema/user"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const getUserWithInfo = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -20,7 +20,7 @@ const getUserWithInfo = (_req, res) => __awaiter(void 0, void 0, void 0, functio
         const userWithInfo = yield user_1.default.aggregate([
             {
                 $lookup: {
-                    from: "hobbies", // Collection name
+                    from: "hobbies",
                     localField: "hobby",
                     foreignField: "_id",
                     as: "hobbyInfo"
@@ -28,12 +28,34 @@ const getUserWithInfo = (_req, res) => __awaiter(void 0, void 0, void 0, functio
             },
             {
                 $lookup: {
-                    from: "departments", // Collection name (lowercase plural of User model)
+                    from: "departments",
                     localField: "department",
                     foreignField: "_id",
-                    as: "departmentInfo"
+                    as: "departmentInfo",
+                    pipeline: [
+                        {
+                            $lookup: {
+                                from: "jobtitles",
+                                localField: "jobTitle",
+                                foreignField: "_id",
+                                as: "jobTitleInfo"
+                            }
+                        }
+                    ]
                 }
             },
+            {
+                $unwind: {
+                    path: "$departmentInfo",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $unwind: {
+                    path: "$departmentInfo.jobTitleInfo",
+                    preserveNullAndEmptyArrays: true
+                }
+            }
         ]);
         res.status(200).json({ success: true, userWithInfo });
     }
@@ -43,14 +65,16 @@ const getUserWithInfo = (_req, res) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.getUserWithInfo = getUserWithInfo;
 const getUserByHobby = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.query;
+    console.log(id, "requery");
     try {
         const users = yield user_1.default.aggregate([
             {
-                $match: { hobby: new mongoose_1.default.Types.ObjectId("6855348fa6d991f95ae963d4") }
+                $match: { hobby: new mongoose_1.default.Types.ObjectId(id) }
             },
             {
                 $lookup: {
-                    from: "hobbies", // collection name
+                    from: "hobbies",
                     localField: "hobby",
                     foreignField: "_id",
                     as: "hobbyInfo"
@@ -58,10 +82,22 @@ const getUserByHobby = (req, res) => __awaiter(void 0, void 0, void 0, function*
             },
             {
                 $lookup: {
-                    from: "departments", // Collection name (lowercase plural of User model)
-                    localField: "department", // From Department
-                    foreignField: "_id", // From User
+                    from: "departments",
+                    localField: "department",
+                    foreignField: "_id",
                     as: "departmentInfo"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$hobbyInfo",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $unwind: {
+                    path: "$departmentInfo",
+                    preserveNullAndEmptyArrays: true
                 }
             },
         ]);
@@ -92,4 +128,24 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.createUser = createUser;
+const getNewUsers = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const newUsers = yield user_1.default.find({ role: "new" });
+        res.status(200).json(newUsers);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+exports.getNewUsers = getNewUsers;
+const getMentors = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const mentors = yield user_1.default.find({ role: "mentor" });
+        res.status(200).json(mentors);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+exports.getMentors = getMentors;
 //# sourceMappingURL=user.js.map

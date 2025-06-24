@@ -4,6 +4,7 @@ const descriptionSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+    
 })
 
 const Description = mongoose.model("Description", descriptionSchema);

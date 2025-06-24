@@ -24,14 +24,14 @@ const LoginPage = () => {
       ...prev,
       [name]: value
     }))
-    // Clear error when user starts typing
+   
     if (errors[name as keyof typeof errors]) {
       setErrors(prev => ({
         ...prev,
         [name]: undefined
       }))
     }
-    // Clear login error when user types
+   
     if (loginError) {
       setLoginError('')
     }
@@ -56,40 +56,42 @@ const LoginPage = () => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!validateForm()) {
-      return
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+  
+  if (!validateForm()) return
+
+  setIsLoading(true)
+  setLoginError('')
+  
+  try {
+    const response = await fetch('http://localhost:8000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Нэвтрэхэд алдаа гарлаа')
     }
 
-    setIsLoading(true)
-    setLoginError('')
+    localStorage.setItem('token', data.token)
+    localStorage.setItem('currentUser', JSON.stringify(data.user))
     
-    try {
-      const foundUser = user.find(u => u.email.toLowerCase() === formData.email.toLowerCase())
-      
-      if (!foundUser) {
-        setLoginError('User not found. Please check your email or sign up.')
-        return
-      }
-      console.log('Login successful for:', foundUser)
-
-      localStorage.setItem('currentUser', JSON.stringify(foundUser))
-      
-      if (foundUser.role === 'mentor') {
-        router.push('/user')
-      } else {
-        router.push('/user')
-      }
-      
-    } catch (error) {
-      console.error('Login failed:', error)
-      setLoginError('An error occurred during login. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
+    
+    router.push(data.user.role === 'mentor' ? '/user' : '/user')
+    
+  } catch (error) {
+    console.error('Login error:', error)
+    setLoginError(error instanceof Error ? error.message : 'Алдаа гарлаа. Дахин оролдоно уу.')
+  } finally {
+    setIsLoading(false)
   }
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
