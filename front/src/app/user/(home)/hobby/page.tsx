@@ -16,20 +16,22 @@ type Hobby = {
 export default function WishPage() {
   const [hobbies, setHobbies] = useState<Hobby[]>([])
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
+  // console.log(baseUrl, "baseUrl")
   const getHobbies = async () => {
     const response = await axios.get(`${baseUrl}/hobby`);
+    console.log(response, "hobbies")
     setHobbies(response.data)
   }
-
+console.log(hobbies, "hobbies")
   useEffect(() => {
     getHobbies();
   }, [])
 
   console.log(baseUrl, "base")
   return (
-    <div className="px-10 h-screen w-full ">
-      <div>
-        <div className="text-center py-30">
+    <div className="px-10 h-full w-full ">
+    
+        <div className="text-center py-10">
           <h1 className="text-slate-800 text-3xl font-semibold">
             Цайны цагаараа хоббигоороо нэгдье
           </h1>
@@ -68,7 +70,7 @@ export default function WishPage() {
 
           </div>
         </div>
-      </div>
+  
     </div>
   );
 }
